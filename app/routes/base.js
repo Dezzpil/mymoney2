@@ -23,9 +23,7 @@ router.get('/p', function(req, res, next) {
 router.post('/p', async function(req, res, next) {
 
   const client = require('./../mongo');
-  client.
-
-
+  
   let value = req.body.value || 0;
   let tags = req.body.tags || '';
   if (req.body.comment) {
