@@ -1,0 +1,26 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+<form method="post">
+
+    <div class="row">
+
+        <div class="three columns">
+            <label>Сумма</label>
+            <input class="u-full-width" type="number" placeholder="100" name="value" id="value">
+        </div>
+
+        <div class="nine columns">
+            <label>Описание (через запятую)</label>
+            <input class="u-full-width" type="text" placeholder="" id="tags" name="tags">
+        </div>
+
+    </div>
+
+    <label>Комментарий</label>
+    <textarea class="u-full-width" placeholder="..." id="comment" name="comment"></textarea>
+
+    <input class="button-primary" type="submit" value="Сохранить">
+
+</form>
+{% endblock %}
