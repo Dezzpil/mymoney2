@@ -2,3 +2,5 @@
 app/node_modules
 app/.vagrant
 features/
+.env
+!.env.dist
