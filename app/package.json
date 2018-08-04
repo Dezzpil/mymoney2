@@ -2,9 +2,10 @@
   "name": "mymoney2",
   "version": "0.1.0",
   "private": true,
-  "engine": {
+  "engines": {
     "node": "8.9.4"
   },
+  "main" : "bin/www",
   "scripts": {
     "start": "node ./bin/www"
   },
