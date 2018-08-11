@@ -18,6 +18,7 @@
     "mongodb": "^3.1.1",
     "morgan": "~1.9.0",
     "node-telegram-bot-api": "^0.30.0",
+    "telegraf": "^3.22.2",
     "twig": "~0.10.3"
   }
 }

@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+const util = require('util');
+
+const token = process.env.TELEGRAM_TOKEN;
+const bot = new Telegraf(token);
+
+// Http webhook, for nginx/heroku users.
+// https://telegraf.js.org/#/?id=webhooks
+// TODO Express.js example integration !
+const port = process.env.PORT;
+bot.startWebhook(`/bot${token}`, null, port);
+
+bot.start((ctx) => ctx.reply('Welcome'));
+
+bot.on('sticker', (ctx) => ctx.reply('👍'));
+bot.command('oldschool', (ctx) => ctx.reply('Hello'));
+
+bot.hears(/^(\d+.+)/i, (ctx) => {
+    ctx.reply('Buy-buy');
+});
+

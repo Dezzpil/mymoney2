@@ -1,1 +1,1 @@
-web: node bin/telegram
+web: node bin/telegraf
