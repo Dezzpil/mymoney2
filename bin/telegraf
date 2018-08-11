@@ -5,12 +5,11 @@ const Telegraf = require('telegraf');
 const PurchaseSaver = require('../src/PurchaseSaver.js');
 const MongoConnectorFn = require('../src/MongoConnectorFn.js');
 
+const token = process.env.TELEGRAM_TOKEN;
 const options = {
-    username: name,
+    username: process.env.TELEGRAM_NAME,
     webhookReply: true
 };
-const token = process.env.TELEGRAM_TOKEN;
-const name = process.env.TELEGRAM_NAME;
 const bot = new Telegraf(token, options);
 
 // Http webhook, for nginx/heroku users.
