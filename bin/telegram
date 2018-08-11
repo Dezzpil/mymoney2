@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const util = require('util');
+
 /**
  * This example demonstrates setting up webhook
  * on the Heroku platform.
@@ -63,7 +65,7 @@ bot.onText(/^(\d+.+)/, (msg, match) => {
                 let col = db.collection('purchases');
                 let r = await col.insertOne(result);
                 bot.sendMessage(chatId, r.toString());
-                bot.sendMessage(chatId, result.toString());
+                bot.sendMessage(chatId, util.inspect(result, {showHidden: false, depth: null}));
             } catch (e) {
                 bot.sendMessage(chatId, 'a2' + e.toString())
             }
