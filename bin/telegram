@@ -62,7 +62,7 @@ bot.onText(/^(\d+.+)/, (msg, match) => {
                 let db = await connector.connect();
                 let col = db.collection('purchases');
                 let r = await col.insertOne(result);
-                bot.sendMessage(chatId, 'a1' + r.ops._id);
+                bot.sendMessage(chatId, r.toString());
             } catch (e) {
                 bot.sendMessage(chatId, 'a2' + e.toString())
             }
