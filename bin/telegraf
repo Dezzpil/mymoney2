@@ -23,10 +23,10 @@ bot.hears(/^(\d+.+)/i, (ctx) => {
         saver.setInput(message).save(connector, (result) => {
             let debug = util.inspect(result, {showHidden: false, depth: null});
             console.log(debug);
-            ctx.reply(debug);
+            ctx.webhookReply(debug);
         });
     } catch (e) {
         let debug = util.inspect(e, {showHidden: false, depth: null});
-        ctx.reply(debug);
+        ctx.webhookReply(debug);
     }
 });
