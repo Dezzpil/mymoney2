@@ -4,7 +4,8 @@ const util = require('util');
 const Telegraf = require('telegraf')
 
 const token = process.env.TELEGRAM_TOKEN;
-const bot = new Telegraf(token);
+const name = process.env.TELEGRAM_NAME;
+const bot = new Telegraf(token, {username: name});
 
 // Http webhook, for nginx/heroku users.
 // https://telegraf.js.org/#/?id=webhooks
