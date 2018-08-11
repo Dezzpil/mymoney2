@@ -13,7 +13,15 @@ const bot = new Telegraf(token, {username: name});
 const port = process.env.PORT;
 bot.startWebhook(`/bot${token}`, null, port);
 
-bot.hears(/\/buy (\d+.+)/i, (ctx) => {
-    ctx.reply('Buy-buy');
+bot.hears(/^(\d+.+)/i, (ctx) => {
+    const message = ctx.message;
+    try {
+        saver.setInput(message).save(connector, (result) => {
+            let debug = util.inspect(result, {showHidden: false, depth: null});
+            ctx.reply(debug);
+        });
+    } catch (e) {
+        let debug = util.inspect(e, {showHidden: false, depth: null});
+        ctx.reply(debug);
+    }
 });
-
