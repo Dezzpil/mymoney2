@@ -19,7 +19,7 @@ const saver = new PurchaseSaver();
 const connector = new MongoConnector();
 bot.hears(/^(\d+.+)/i, (ctx) => {
     console.log(ctx.message, ctx.match);
-    const message = ctx.match;
+    const message = ctx.match[1];
     try {
         saver.setInput(message).save(connector, (result) => {
             let debug = util.inspect(result, {showHidden: false, depth: null});
