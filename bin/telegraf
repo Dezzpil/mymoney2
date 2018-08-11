@@ -18,7 +18,7 @@ bot.startWebhook(`/bot${token}`, null, port);
 const saver = new PurchaseSaver();
 const connector = new MongoConnector();
 bot.hears(/^(\d+.+)/i, (ctx) => {
-    const message = ctx.message;
+    const message = ctx.match;
     try {
         saver.setInput(message).save(connector, (result) => {
             let debug = util.inspect(result, {showHidden: false, depth: null});
