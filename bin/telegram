@@ -49,7 +49,6 @@ bot.onText(/^(\d+.+)/, (msg, match) => {
     const resp = match[1]; // the captured "whatever"
 
     try {
-
         // TODO DRY routes/base.js
         let parsed = parser.parse(resp);
 
@@ -63,12 +62,12 @@ bot.onText(/^(\d+.+)/, (msg, match) => {
                 let db = await connector.connect();
                 let col = db.collection('purchases');
                 let r = await col.insertOne(result);
-                bot.sendMessage(chatId, r.ops._id);
+                bot.sendMessage(chatId, 'a1' + r.ops._id);
             } catch (e) {
-                bot.sendMessage(chatId, e.toString())
+                bot.sendMessage(chatId, 'a2' + e.toString())
             }
         })();
     } catch (e) {
-        bot.sendMessage(chatId, e.toString())
+        bot.sendMessage(chatId, 'a3' + e.toString())
     }
 });
