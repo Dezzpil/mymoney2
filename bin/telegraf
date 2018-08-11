@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const util = require('util');
-const Telegraf = require('telegraf')
+const Telegraf = require('telegraf');
+const PurchaseSaver = require('../src/PurchaseSaver.js');
+const MongoConnector = require('../src/MongoConnector.js');
 
 const token = process.env.TELEGRAM_TOKEN;
 const name = process.env.TELEGRAM_NAME;
@@ -13,6 +15,8 @@ const bot = new Telegraf(token, {username: name});
 const port = process.env.PORT;
 bot.startWebhook(`/bot${token}`, null, port);
 
+const saver = new PurchaseSaver();
+const connector = new MongoConnector();
 bot.hears(/^(\d+.+)/i, (ctx) => {
     const message = ctx.message;
     try {
