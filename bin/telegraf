@@ -3,7 +3,7 @@
 const util = require('util');
 const Telegraf = require('telegraf');
 const PurchaseSaver = require('../src/PurchaseSaver.js');
-const MongoConnector = require('../src/MongoConnector.js');
+const MongoConnectorFn = require('../src/MongoConnectorFn.js');
 
 const options = {
     username: name,
@@ -21,14 +21,10 @@ const port = process.env.PORT; // use Heroku default
 bot.startWebhook(`/bot${token}`, null, port);
 
 const saver = new PurchaseSaver();
-const connector = new MongoConnector();
+const connector = new MongoConnectorFn();
 bot.hears(/^(\d+.+)/i, (ctx) => {
     const message = ctx.match[1];
     try {
-        saver.setInput(trimmed).saveFn(connector, (err, result) => {
-            err ? console.error(err) : console.log(result);
-        });
-
         saver.setInput(message).saveFn(connector, (err, result) => {
             if (err) {
                 console.error(err);
