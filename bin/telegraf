@@ -16,7 +16,8 @@ const bot = new Telegraf(token, options);
 // Http webhook, for nginx/heroku users.
 // https://telegraf.js.org/#/?id=webhooks
 // TODO Express.js example integration !
-const port = process.env.PORT;
+
+const port = process.env.PORT; // use Heroku default
 bot.startWebhook(`/bot${token}`, null, port);
 
 const saver = new PurchaseSaver();
@@ -24,10 +25,19 @@ const connector = new MongoConnector();
 bot.hears(/^(\d+.+)/i, (ctx) => {
     const message = ctx.match[1];
     try {
-        saver.setInput(message).save(connector, (result) => {
-            let debug = util.inspect(result, {showHidden: false, depth: null});
-            console.log(debug);
-            ctx.reply(debug);
+        saver.setInput(trimmed).saveFn(connector, (err, result) => {
+            err ? console.error(err) : console.log(result);
+        });
+
+        saver.setInput(message).saveFn(connector, (err, result) => {
+            if (err) {
+                console.error(err);
+            } else {
+                let debug = util.inspect(result, {showHidden: false, depth: null});
+                console.log(debug);
+                ctx.reply(debug);
+            }
+            connector.close();
         });
     } catch (e) {
         let debug = util.inspect(e, {showHidden: false, depth: null});

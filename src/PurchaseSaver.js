@@ -54,6 +54,25 @@ class PurchaseSaver {
             }
         })();
     }
+
+    /**
+     * @param {MongoConnector} connector
+     * @param {Function} complete
+     * @throws Error
+     */
+    saveFn(connector, complete) {
+        if (!('value' in this.parsed)) {
+            throw new Error('Данные покупки не заданы');
+        }
+
+        let parsed = this.parsed;
+        connector.connect(function(db) {
+            let col = db.collection('purchases');
+            col.insertOne(parsed, function(err, result) {
+                complete(err, parsed);
+            });
+        });
+    }
 }
 
 module.exports = PurchaseSaver;

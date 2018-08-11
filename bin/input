@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const readline = require('readline');
-const MongoConnector = require('../src/MongoConnector.js');
+const MongoConnectorFn = require('../src/MongoConnectorFn.js');
 const PurchaseSaver = require('../src/PurchaseSaver.js');
 
 const rl = readline.createInterface({
@@ -9,7 +9,7 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-const connector = new MongoConnector();
+const connector = new MongoConnectorFn();
 const saver = new PurchaseSaver();
 
 rl.on('line', (line) => {
@@ -22,8 +22,8 @@ rl.on('line', (line) => {
             break;
 
         default:
-            saver.setInput(trimmed).save(connector, (result) => {
-                console.log(result);
+            saver.setInput(trimmed).saveFn(connector, (err, result) => {
+                err ? console.error(err) : console.log(result);
             });
             break;
     }
