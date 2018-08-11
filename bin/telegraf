@@ -21,20 +21,27 @@ bot.startWebhook(`/bot${token}`, null, port);
 
 const saver = new PurchaseSaver();
 const connector = new MongoConnectorFn();
+
 bot.hears(/^(\d+.+)/i, (ctx) => {
+
     const message = ctx.match[1];
+
     try {
-        saver.setInput(message).saveFn(connector, (err, result) => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log(result);
-                ctx.reply('OK ' + result._id);
-            }
-            connector.close();
-        });
+        saver.setInput(message);
     } catch (e) {
         let debug = util.inspect(e, {showHidden: false, depth: null});
         ctx.reply(debug);
     }
+
+    saver.saveFn(connector, (err, result) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(result);
+            ctx.reply('Сохранено ' + result._id);
+        }
+        connector.close();
+    });
+
+    ctx.reply('OK');
 });
