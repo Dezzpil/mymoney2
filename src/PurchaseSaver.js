@@ -37,7 +37,7 @@ class PurchaseSaver {
      * @param {Function} complete
      * @throws Error
      */
-    async save(connector, complete) {
+    save(connector, complete) {
         if (!('value' in this.parsed)) {
             throw new Error('Данные покупки не заданы');
         }
