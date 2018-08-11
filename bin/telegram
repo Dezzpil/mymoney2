@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-const InputParser = require('../src/InputParser.js');
-const parser = new InputParser();
-const MongoConnector = require('../src/MongoConnector.js');
-const connector = new MongoConnector();
 
 /**
  * This example demonstrates setting up webhook
@@ -36,31 +32,43 @@ const bot = new TelegramBot(token, options);
 bot.setWebHook(`${url}/bot${token}`);
 
 // Just to ping!
-bot.on('message', function onMessage(msg) {
-    bot.sendMessage(msg.chat.id, 'I am alive on Heroku!');
-});
-
-// bot.onText(/^(\d+.+)/, (msg, match) => {
-//
-//     // parse and save info
-//     const chatId = msg.chat.id;
-//     const resp = match[1]; // the captured "whatever"
-//
-//     try {
-//         let result = parser.parse(resp);
-//         // save result object to mongo
-//         (async function() {
-//             try {
-//                 let db = await connector.connect();
-//                 let col = db.collection('purchases');
-//                 let r = await col.insertOne(result);
-//                 bot.sendMessage(chatId, r.ops._id);
-//             } catch (e) {
-//                 bot.sendMessage(chatId, e.toString())
-//             }
-//         })();
-//     } catch (e) {
-//         bot.sendMessage(chatId, e.toString())
-//     }
-//
+// bot.on('message', function onMessage(msg) {
+//     bot.sendMessage(msg.chat.id, 'I am alive on Heroku!');
 // });
+
+const InputParser = require('../src/InputParser.js');
+const MongoConnector = require('../src/MongoConnector.js');
+
+const parser = new InputParser();
+const connector = new MongoConnector();
+
+bot.onText(/^(\d+.+)/, (msg, match) => {
+
+    // parse and save info
+    const chatId = msg.chat.id;
+    const resp = match[1]; // the captured "whatever"
+
+    try {
+
+        // TODO DRY routes/base.js
+        let parsed = parser.parse(resp);
+
+        let rightNow = new Date();
+        let now = rightNow.toISOString().slice(0,10).replace(/-/g,"/");
+        let result = Object.assign(parsed, {made_at: now});
+
+        // save result object to mongo
+        (async function() {
+            try {
+                let db = await connector.connect();
+                let col = db.collection('purchases');
+                let r = await col.insertOne(result);
+                bot.sendMessage(chatId, r.ops._id);
+            } catch (e) {
+                bot.sendMessage(chatId, e.toString())
+            }
+        })();
+    } catch (e) {
+        bot.sendMessage(chatId, e.toString())
+    }
+});
