@@ -1,5 +1,5 @@
 /**
- *
+ * @todo write documentation
  */
 class InputParser {
 
@@ -7,24 +7,30 @@ class InputParser {
 
     }
 
-    render(input) {
-        console.log(input);
+    /**
+     * Рассчитать выражение типа x-y
+     * @param {String} expression
+     * @return {number}
+     */
+    calculate(expression) {
+        return 0;
     }
 
     /**
      *
-     * @param input
+     * @param {String} input
      * @returns {{value: number, details: string}}
      * @throws Error
      */
     parse(input) {
+        let trimmed = input.trim();
         let regexp = /^([0-9\.]+)/i;
-        let result = regexp.exec(input);
+        let result = regexp.exec(trimmed);
 
         if (result !== null) {
             return {
                 value: parseFloat(result[0]),
-                details: input.substr(result[0].length).trim()
+                details: trimmed.substr(result[0].length).trim()
             }
         } else {
             throw new Error('Не удалось обнаружить сумму покупки в строке: ' + input);

@@ -38,10 +38,10 @@ bot.setWebHook(`${url}/bot${token}`);
 //     bot.sendMessage(msg.chat.id, 'I am alive on Heroku!');
 // });
 
-const InputParser = require('../src/InputParser.js');
+const PurchaseSaver = require('../src/PurchaseSaver.js');
 const MongoConnector = require('../src/MongoConnector.js');
 
-const parser = new InputParser();
+const saver = new PurchaseSaver();
 const connector = new MongoConnector();
 
 bot.onText(/^(\d+.+)/, (msg, match) => {
@@ -51,26 +51,12 @@ bot.onText(/^(\d+.+)/, (msg, match) => {
     const resp = match[1]; // the captured "whatever"
 
     try {
-        // TODO DRY routes/base.js
-        let parsed = parser.parse(resp);
-
-        let rightNow = new Date();
-        let now = rightNow.toISOString().slice(0,10).replace(/-/g,"/");
-        let result = Object.assign(parsed, {made_at: now});
-
-        // save result object to mongo
-        (async function() {
-            try {
-                let db = await connector.connect();
-                let col = db.collection('purchases');
-                let r = await col.insertOne(result);
-                bot.sendMessage(chatId, r.toString());
-                bot.sendMessage(chatId, util.inspect(result, {showHidden: false, depth: null}));
-            } catch (e) {
-                bot.sendMessage(chatId, 'a2' + e.toString())
-            }
-        })();
+        saver.setInput(resp).save(connector, (result) => {
+            let debug = util.inspect(result, {showHidden: false, depth: null});
+            bot.sendMessage(chatId, debug);
+        });
     } catch (e) {
-        bot.sendMessage(chatId, 'a3' + e.toString())
+        let debug = util.inspect(e, {showHidden: false, depth: null});
+        bot.sendMessage(chatId, 'a3' + debug);
     }
 });

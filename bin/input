@@ -1,45 +1,30 @@
 #!/usr/bin/env node
 
 const readline = require('readline');
-const InputParser = require('../src/InputParser.js');
 const MongoConnector = require('../src/MongoConnector.js');
-const assert = require('assert');
+const PurchaseSaver = require('../src/PurchaseSaver.js');
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-const parser = new InputParser();
 const connector = new MongoConnector();
+const saver = new PurchaseSaver();
 
 rl.on('line', (line) => {
     let trimmed = line.trim();
     switch (trimmed) {
         case 'q':
         case 'quit':
-            console.log(`Ok. Goodbye!`);
-            connector.close();
             rl.close();
+            connector.close();
             break;
 
         default:
-            // parse purchase
-            let result = parser.parse(trimmed);
-            console.log(`${trimmed} parsed`, result);
-
-            // save result object to mongo
-            (async function() {
-                try {
-                    let db = await connector.connect();
-                    let col = db.collection('purchases');
-                    let r = await col.insertOne(result);
-                    console.log(r.ops);
-                    console.log(`${trimmed} saved with _id ${r.ops._id}!`);
-                } catch (e) {
-                    console.log(e.stack);
-                }
-            })();
+            saver.setInput(trimmed).save(connector, (result) => {
+                console.log(result);
+            });
             break;
     }
     rl.prompt();
