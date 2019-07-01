@@ -2,8 +2,10 @@
 
 const util = require('util');
 const Telegraf = require('telegraf');
+const googleapis = require('googleapis');
 const PurchaseSaver = require('../src/PurchaseSaver.js');
 const MongoConnectorFn = require('../src/MongoConnectorFn.js');
+
 
 const token = process.env.TELEGRAM_TOKEN;
 const options = {
@@ -35,10 +37,10 @@ bot.hears(/^(\d+.+)/i, (ctx) => {
 
     saver.saveFn(connector, (err, result) => {
         if (err) {
-            console.error(err);
+            ctx.reply(`Не удалось сохранить: ${util.inspect(err)}`);
         } else {
-            console.log(result);
-            ctx.reply('Сохранено ' + result._id);
+            ctx.reply(`Сохранено ${result._id}`);
+
         }
         connector.close();
     });

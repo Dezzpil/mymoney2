@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "generic/debian8"
+  config.vm.box = "generic/debian9"
   config.vm.box_check_update = false
 
   # Пробрасываем порты для доступа из вне (с хост машины)
@@ -18,12 +18,14 @@ Vagrant.configure("2") do |config|
   # Настраиваем провизион. Ставим все что нужно и конфигуряем
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get install -y curl nano
-    curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-    apt-get install -y nodejs build-essential
+    apt-get install -y curl build-essential libssl-dev dirmngr
+    apt-get remove -y nodejs
 
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
-    echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+    curl -sL https://deb.nodesource.com/setup_11.x | bash -
+    apt-get install -y nodejs
+
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+    echo "deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
     apt-get update
     apt-get install -y mongodb-org
 

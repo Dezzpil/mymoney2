@@ -37,29 +37,6 @@ class PurchaseSaver {
      * @param {Function} complete
      * @throws Error
      */
-    save(connector, complete) {
-        if (!('value' in this.parsed)) {
-            throw new Error('Данные покупки не заданы');
-        }
-
-        let parsed = this.parsed;
-        (async function() {
-            try {
-                let db = await connector.connect();
-                let col = db.collection('purchases');
-                let result = await col.insertOne(parsed);
-                complete(parsed);
-            } catch (e) {
-                throw e;
-            }
-        })();
-    }
-
-    /**
-     * @param {MongoConnector} connector
-     * @param {Function} complete
-     * @throws Error
-     */
     saveFn(connector, complete) {
         if (!('value' in this.parsed)) {
             throw new Error('Данные покупки не заданы');
