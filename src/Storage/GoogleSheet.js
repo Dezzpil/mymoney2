@@ -41,7 +41,7 @@ class GoogleSheet extends Storage {
         // spreadsheet key is the long id in the sheets URL
         const doc = new GoogleSpreadsheet(this.sheetId);
         return new Promise((resolve, reject) => {
-            doc.useServiceAccountAuth(creds, (err, info) => {
+            doc.useServiceAccountAuth(this.creds, (err, info) => {
                 if (err) reject(err);
                 resolve(doc, info);
             });
