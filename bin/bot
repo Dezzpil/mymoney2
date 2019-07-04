@@ -7,7 +7,8 @@ const Parser = require('../src/Parser');
 const Mongo = require('../src/Storage/Mongo');
 const Saver = require('../src/Saver.js');
 
-const bot = new Telegraf(process.env.TELEGRAM_TOKEN, {
+const token = process.env.TELEGRAM_TOKEN;
+const bot = new Telegraf(token, {
     username: process.env.TELEGRAM_NAME,
     webhookReply: true
 });
