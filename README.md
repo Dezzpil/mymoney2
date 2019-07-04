@@ -1,11 +1,14 @@
 #MyMoney Telegram Bot
 
 ## Install
-https://blog.stephsmith.io/tutorial-google-sheets-api-node-js/
 
-Method 3: Node.js OAuth2 - Google Developer Console and npm google-spreadsheet package
+### Error: Cannot find module 'foo'
+* https://help.heroku.com/TO64O3OG/cannot-find-module-in-node-js-at-runtime
+* https://help.heroku.com/QMZ3RR7L/how-do-i-fix-a-missing-module-in-my-package-json
 
-## Google Spread Sheets API
-https://developers.google.com/sheets/api/reference/rest/
+Solution:
+```bash
+heroku config:set NODE_MODULES_CACHE=false
+```
 
 ## Using Heroku
