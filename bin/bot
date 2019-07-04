@@ -23,10 +23,12 @@ const saver = new Saver(parser);
 bot.hears(/^(\d+.+)/i, async (ctx) => {
 
     const message = ctx.match[1];
+    // console.log(`Received msg: ${message}`);
+    // console.log(util.inspect(ctx.from, {showHidden: false, depth: null}));
 
     try {
         saver.setInput(message);
-        saver.setUser(ctx.from);
+        saver.setUser(ctx.from.username);
     } catch (e) {
         let debug = util.inspect(e, {showHidden: false, depth: null});
         ctx.reply(debug);
