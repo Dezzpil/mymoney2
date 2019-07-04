@@ -4,6 +4,7 @@ const Telegraf = require('telegraf');
 
 const Parser = require('../src/Parser');
 const Mongo = require('../src/Storage/Mongo');
+const GoogleSheet = require('../src/Storage/GoogleSheet');
 const Saver = require('../src/Saver.js');
 
 const token = process.env.TELEGRAM_TOKEN;
@@ -21,12 +22,11 @@ const saver = new Saver(parser);
 
 bot.hears(/^(\d+.+)/i, async (ctx) => {
 
-    ctx.reply(util.inspect(ctx, {showHidden: false, depth: null}));
-
     const message = ctx.match[1];
 
     try {
         saver.setInput(message);
+        saver.setUser(ctx.from);
     } catch (e) {
         let debug = util.inspect(e, {showHidden: false, depth: null});
         ctx.reply(debug);
@@ -34,8 +34,9 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
 
     try {
         const mongoStorage = new Mongo();
-        const results = await saver.save([mongoStorage]);
-        ctx.reply(`Сохранено: ${util.inspect(results)}`);
+        const googleStorage = new GoogleSheet();
+        await saver.save([mongoStorage, googleStorage]);
+        ctx.reply(`Сохранено: ${util.inspect(saver.getResults())}`);
     } catch (err) {
         ctx.reply(`Не удалось сохранить: ${util.inspect(err)}`);
     }
