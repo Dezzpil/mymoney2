@@ -1,8 +1,7 @@
 #!/usr/bin/env node
-
 const util = require('util');
-
 const Telegraf = require('telegraf');
+
 const Parser = require('../src/Parser');
 const Mongo = require('../src/Storage/Mongo');
 const Saver = require('../src/Saver.js');

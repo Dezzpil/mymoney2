@@ -1,20 +1,25 @@
 {
   "name": "mymoney2",
-  "version": "1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "app for saving purchases from telegram bot",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Dezzpil/mymoney2.git"
+  },
+  "license": "MIT",
   "engines": {
     "node": "11.15.0"
   },
-  "main": "bin/www",
+  "main": "bin/bot",
   "scripts": {
-    "cli": "node ./bin/cli",
-    "bot": "node ./bin/telegraf"
+    "cli": "node bin/cli",
+    "bot": "node bin/bot"
   },
   "dependencies": {
     "eslint": "^6.0.1",
     "google-spreadsheet": "^2.0.7",
     "googleapis": "^39.2.0",
     "mongodb": "^3.1.1",
-    "telegraf": "^3.22.2"
+    "telegraf": "3.22.2"
   }
 }
