@@ -1,30 +1,25 @@
 #!/usr/bin/env node
 
 const util = require('util');
+
 const Telegraf = require('telegraf');
-const googleapis = require('googleapis');
-const PurchaseSaver = require('../src/PurchaseSaver.js');
-const MongoConnectorFn = require('../src/MongoConnectorFn.js');
+const Parser = require('../src/Parser');
+const Mongo = require('../src/Storage/Mongo');
+const Saver = require('../src/Saver.js');
 
-
-const token = process.env.TELEGRAM_TOKEN;
-const options = {
+const bot = new Telegraf(process.env.TELEGRAM_TOKEN, {
     username: process.env.TELEGRAM_NAME,
     webhookReply: true
-};
-const bot = new Telegraf(token, options);
+});
 
 // Http webhook, for nginx/heroku users.
 // https://telegraf.js.org/#/?id=webhooks
-// TODO Express.js example integration !
+bot.startWebhook(`/bot${token}`, null, process.env.PORT);
 
-const port = process.env.PORT; // use Heroku default
-bot.startWebhook(`/bot${token}`, null, port);
+const parser = new Parser();
+const saver = new Saver(parser);
 
-const saver = new PurchaseSaver();
-const connector = new MongoConnectorFn();
-
-bot.hears(/^(\d+.+)/i, (ctx) => {
+bot.hears(/^(\d+.+)/i, async (ctx) => {
 
     const message = ctx.match[1];
 
@@ -35,15 +30,13 @@ bot.hears(/^(\d+.+)/i, (ctx) => {
         ctx.reply(debug);
     }
 
-    saver.saveFn(connector, (err, result) => {
-        if (err) {
-            ctx.reply(`Не удалось сохранить: ${util.inspect(err)}`);
-        } else {
-            ctx.reply(`Сохранено ${result._id}`);
-
-        }
-        connector.close();
-    });
+    try {
+        const mongoStorage = new Mongo();
+        const results = await saver.save([mongoStorage]);
+        ctx.reply(`Сохранено: ${util.inspect(results)}`);
+    } catch (err) {
+        ctx.reply(`Не удалось сохранить: ${util.inspect(err)}`);
+    }
 
     // Бот отвечает в 2 сообщения: ОК, а потом _id записи
     // Если убрать этот ответ, то и _id не придет чат
