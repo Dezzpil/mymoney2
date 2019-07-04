@@ -19,8 +19,8 @@ class Saver {
      */
     setInput(string) {
         try {
-            this.parsed = this.parser.parse(string);
-            this.parsed['made_at'] = Date.now();
+            this.data = this.parser.parse(string);
+            this.data['made_at'] = Date.now();
         } catch (e) {
             throw e;
         }
@@ -33,7 +33,17 @@ class Saver {
      * @return {Saver}
      */
     setDate(timestamp) {
-        this.parsed['made_at'] = timestamp;
+        this.data['made_at'] = timestamp;
+        return this;
+    }
+
+    /**
+     *
+     * @param {mixed} user
+     * @return {Saver}
+     */
+    setUser(user) {
+        this.data['user'] = user;
         return this;
     }
 
@@ -43,7 +53,7 @@ class Saver {
      * @return {Promise}
      */
     async save(storages, rawResult = false) {
-        if (!('value' in this.parsed)) {
+        if (!('value' in this.data)) {
             throw new Error('Данные покупки не заданы');
         }
 
@@ -53,7 +63,7 @@ class Saver {
             const storage = storages[i];
             try {
                 const target = await storage.connect();
-                const result = await storage.store(target, this.parsed, rawResult);
+                const result = await storage.store(target, this.data, rawResult);
                 this.results.push(result);
                 storage.close();
             } catch (e) {

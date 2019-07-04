@@ -21,6 +21,8 @@ const saver = new Saver(parser);
 
 bot.hears(/^(\d+.+)/i, async (ctx) => {
 
+    ctx.reply(util.inspect(ctx, {showHidden: false, depth: null}));
+
     const message = ctx.match[1];
 
     try {

@@ -4,4 +4,5 @@ node_modules
 .vagrant
 .env
 !.env.dist
-client_secret.json
+google_account.json
+google_private_key.txt

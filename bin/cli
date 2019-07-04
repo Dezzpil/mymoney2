@@ -3,6 +3,7 @@
 const readline = require('readline');
 
 const Mongo = require('../src/Storage/Mongo');
+const GoogleSheet = require('../src/Storage/GoogleSheet');
 const Parser = require('../src/Parser');
 const Saver = require('../src/Saver.js');
 
@@ -14,6 +15,7 @@ const rl = readline.createInterface({
 const parser = new Parser();
 const saver = new Saver(parser);
 const mongoStorage = new Mongo();
+const sheetStorage = new GoogleSheet();
 
 (async () => {
     try {

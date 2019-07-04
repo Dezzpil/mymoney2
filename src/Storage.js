@@ -1,9 +1,18 @@
 
 class Storage {
 
-    async connect(options) {}
+    constructor(options) {}
 
-    async store() {}
+    async connect() {}
+
+    /**
+     *
+     * @param target
+     * @param data
+     * @param raw
+     * @return {Promise<void>}
+     */
+    async store(target, data, raw = false) {}
 
     async close() {}
 
