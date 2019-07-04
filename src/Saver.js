@@ -1,4 +1,5 @@
 const assert = require('assert');
+const util = require('util');
 const InputParser = require('./Parser.js');
 
 /**
@@ -68,6 +69,7 @@ class Saver {
                 storage.close();
             } catch (e) {
                 this.errors.push(e);
+                console.error(util.inspect(e, {showHidden: false, depth: null}));
             }
         }
 
