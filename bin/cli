@@ -20,6 +20,7 @@ const sheetStorage = new GoogleSheet();
 (async () => {
     try {
         await mongoStorage.connect();
+        await sheetStorage.connect();
     } catch (e) {
         console.error(e);
         process.exit(1);
@@ -39,7 +40,7 @@ rl.on('line', async (line) => {
         default:
             try {
                 saver.setInput(trimmed);
-                await saver.save([mongoStorage]);
+                await saver.save([mongoStorage, sheetStorage]);
                 const results = saver.getResults();
                 console.log(results);
             } catch (e) {
