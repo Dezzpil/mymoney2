@@ -53,7 +53,7 @@ class GoogleSheet extends Storage {
             target.addRow(1, data, (err, row) => {
                 if (err) reject(err);
                 if (raw) resolve(row);
-                resolve(row.id);
+                resolve(data['value']);
             });
         })
 

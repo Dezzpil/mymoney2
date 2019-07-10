@@ -10,6 +10,8 @@ class Saver {
     constructor(parser) {
         assert(parser instanceof InputParser);
         this.parser = parser;
+        this.results = [];
+        this.errors = [];
     }
 
     /**
@@ -40,7 +42,7 @@ class Saver {
 
     /**
      *
-     * @param {mixed} user
+     * @param {String} user
      * @return {Saver}
      */
     setUser(user) {
@@ -58,8 +60,6 @@ class Saver {
             throw new Error('Данные покупки не заданы');
         }
 
-        this.results = [];
-        this.errors = [];
         for (let i = 0; i < storages.length; i++) {
             const storage = storages[i];
             try {

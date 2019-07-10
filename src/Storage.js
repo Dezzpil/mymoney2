@@ -12,7 +12,9 @@ class Storage {
      * @param raw
      * @return {Promise<void>}
      */
-    async store(target, data, raw = false) {}
+    async store(target, data, raw = false) {
+        // TODO remove target arg
+    }
 
     async close() {}
 

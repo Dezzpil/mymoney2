@@ -23,24 +23,31 @@ const saver = new Saver(parser);
 bot.hears(/^(\d+.+)/i, async (ctx) => {
 
     const message = ctx.match[1];
-    // console.log(`Received msg: ${message}`);
-    // console.log(util.inspect(ctx.from, {showHidden: false, depth: null}));
+    const user = ctx.from.username
+        || ctx.from.first_name + ' ' + ctx.from.last_name;
+
 
     try {
         saver.setInput(message);
-        saver.setUser(ctx.from.username);
+        saver.setUser(user);
     } catch (e) {
         let debug = util.inspect(e, {showHidden: false, depth: null});
         ctx.reply(debug);
     }
 
     try {
-        const mongoStorage = new Mongo();
-        const googleStorage = new GoogleSheet();
-        await saver.save([mongoStorage, googleStorage]);
-        ctx.reply(`Сохранено: ${util.inspect(saver.getResults())}`);
+        await saver.save([new Mongo()]);
+
+        const humanDate = new Date().toISOString().
+            replace(/T/, ' ').      // replace T with a space
+            replace(/\..+/, '')     // delete the dot and everything after
+            ;
+        saver.setDate(humanDate);
+        await saver.save([new GoogleSheet()]);
+
+        ctx.reply(`Сохранено: ${saver.getResults()}`);
     } catch (err) {
-        ctx.reply(`Не удалось сохранить: ${util.inspect(err)}`);
+        ctx.reply(`Не удалось сохранить: ${util.inspect(saver.getErrors())}`);
     }
 
     // Бот отвечает в 2 сообщения: ОК, а потом _id записи
@@ -48,3 +55,21 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
     // Возможно из-за того, что соединение рвется, я хз
     ctx.reply('OK');
 });
+
+// bot.hears(/^за (.+?)\W/i, async (ctx) => {
+//
+//     const period = ctx.match[1];
+//     const periodMap = {
+//         'сегодня': 'today',
+//         'день': '1d',
+//         'неделю': '1w',
+//         'месяц': '1m'
+//     };
+//
+//     let msg = `Период ${period} не задан в программе`;
+//     if (period in periodMap) {
+//          msg = await Mongo.sum(periodMap[period]);
+//     }
+//
+//     ctx.reply(msg);
+// });

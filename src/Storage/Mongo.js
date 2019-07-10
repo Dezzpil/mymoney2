@@ -12,13 +12,15 @@ class Mongo extends Storage {
     constructor(options) {
         super(options);
         this.URI = defaultURI;
-        this.DB = defaultDB;
+        this.dbName = defaultDB;
         if (typeof options === 'object') {
             if ('URI' in options) this.URI = options.URI;
-            if ('DB' in options) this.DB = options.DB;
+            if ('dbName' in options) this.dbName = options.dbName;
         }
         console.log(`Mongo URI '${this.URI}'`);
-        console.log(`Mongo DB '${this.DB}'`);
+        console.log(`Mongo DB '${this.dbName}'`);
+
+        this.db = null;
     }
 
     async connect() {
@@ -28,15 +30,15 @@ class Mongo extends Storage {
                 { useNewUrlParser: true },
                 (err, client) => {
                     if (err) reject(err);
-                    resolve(client.db(this.DB));
+                    this.db = client.db(this.dbName);
+                    resolve();
                 }
             );
         });
     }
 
     async store(target, data, raw = false) {
-        const db = target;
-        let col = db.collection('purchases');
+        let col = this.db.collection('purchases');
         return new Promise((resolve, reject) => {
             col.insertOne(data, function (err, result) {
                 if (err) reject(err);
@@ -44,6 +46,12 @@ class Mongo extends Storage {
                 resolve(result.insertedId);
             });
         });
+    }
+
+    async sum(timeModifier) {
+        let col = this.db.collection('purchases');
+        // col.find();
+        // TODO
     }
 
     async close() {
