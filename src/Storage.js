@@ -7,13 +7,12 @@ class Storage {
 
     /**
      *
-     * @param target
      * @param data
      * @param raw
      * @return {Promise<void>}
      */
-    async store(target, data, raw = false) {
-        // TODO remove target arg
+    async store(data, raw = false) {
+        
     }
 
     async close() {}

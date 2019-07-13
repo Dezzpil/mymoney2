@@ -35,6 +35,8 @@ class GoogleSheet extends Storage {
                 this.sheetId = options.sheet_id;
             }
         }
+
+        this.doc = null;
     }
 
     async connect() {
@@ -43,14 +45,15 @@ class GoogleSheet extends Storage {
         return new Promise((resolve, reject) => {
             doc.useServiceAccountAuth(this.creds, (err, info) => {
                 if (err) reject(err);
-                resolve(doc, info);
+                this.doc = doc;
+                resolve(info);
             });
         });
     }
 
-    async store(target, data, raw = false) {
+    async store(data, raw = false) {
         return new Promise((resolve, reject) => {
-            target.addRow(1, data, (err, row) => {
+            this.doc.addRow(1, data, (err, row) => {
                 if (err) reject(err);
                 if (raw) resolve(row);
                 resolve(data['value']);

@@ -63,8 +63,8 @@ class Saver {
         for (let i = 0; i < storages.length; i++) {
             const storage = storages[i];
             try {
-                const target = await storage.connect();
-                const result = await storage.store(target, this.data, rawResult);
+                await storage.connect();
+                const result = await storage.store(this.data, rawResult);
                 this.results.push(result);
                 storage.close();
             } catch (e) {

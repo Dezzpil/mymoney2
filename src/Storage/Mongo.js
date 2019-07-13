@@ -24,32 +24,34 @@ class Mongo extends Storage {
     }
 
     async connect() {
-        return new Promise((resolve, reject) => {
-            this.client = MongoClient.connect(
-                this.URI,
-                { useNewUrlParser: true },
-                (err, client) => {
-                    if (err) reject(err);
-                    this.db = client.db(this.dbName);
-                    resolve();
-                }
-            );
-        });
+        this.client = new MongoClient(this.URI);
+        try {
+            await this.client.connect();
+            this.db = this.client.db(this.dbName);
+        } catch (e) {
+            throw e;
+        }
     }
 
-    async store(target, data, raw = false) {
-        let col = this.db.collection('purchases');
-        return new Promise((resolve, reject) => {
-            col.insertOne(data, function (err, result) {
-                if (err) reject(err);
-                if (raw) resolve(result);
-                resolve(result.insertedId);
-            });
-        });
+    async store(data, raw = false) {
+        const col = this.db.collection('purchases');
+
+        try {
+            const result = await col.insertOne(data);
+            return raw ? result : result.insertedId;
+        } catch (e) {
+            throw e;
+        }
     }
 
     async sum(timeModifier) {
-        let col = this.db.collection('purchases');
+
+
+
+        const col = this.db.collection('purchases');
+
+
+
         // col.find();
         // TODO
     }
@@ -63,3 +65,7 @@ class Mongo extends Storage {
 }
 
 module.exports = Mongo;
+
+if (require.main == module) {
+
+}
