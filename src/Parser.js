@@ -8,7 +8,10 @@ class Parser {
      * @param {Object} options
      */
     constructor(options) {
-        this.verbose = options.verbose || false;
+        this.verbose = false;
+        if (options && options.verbose) {
+            this.verbose = options.verbose;
+        }
     }
 
     /**
