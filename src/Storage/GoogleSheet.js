@@ -54,7 +54,7 @@ class GoogleSheet extends Storage {
     async store(data, raw = false) {
         // use custom function of sheet!
         // @see https://stackoverflow.com/a/45227381
-        data['mate_at'] = `=FROM_UNIX_EPOCH(${data['made_at']})`;
+        data['made_at'] = `=FROM_UNIX_EPOCH(${data['made_at']})`;
         return new Promise((resolve, reject) => {
             this.doc.addRow(1, data, (err, row) => {
                 if (err) reject(err);

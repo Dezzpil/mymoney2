@@ -76,6 +76,7 @@ class Mongo extends Storage {
         const result = await col.find(
             {$and: [{made_at: {$gte: timestampFrom}}, {made_at: {$lte: timestampTill}}]}
         ).toArray();
+        console.log(`Mongo sum for period ${timestampFrom} ${timestampTill}`);
         result.forEach((doc) => {
             sum += parseInt(doc.value);
         });
