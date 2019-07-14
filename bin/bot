@@ -36,15 +36,7 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
     }
 
     try {
-        await saver.save([new Mongo()]);
-
-        const humanDate = new Date().toISOString().
-            replace(/T/, ' ').      // replace T with a space
-            replace(/\..+/, '')     // delete the dot and everything after
-            ;
-        saver.setDate(humanDate);
-        await saver.save([new GoogleSheet()]);
-
+        await saver.save([new Mongo(), new GoogleSheet()]);
         ctx.reply(`Сохранено: ${saver.getResults()}`);
     } catch (err) {
         ctx.reply(`Не удалось сохранить: ${util.inspect(saver.getErrors())}`);
@@ -56,20 +48,21 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
     // ctx.reply('OK');
 });
 
-// bot.hears(/^за (.+?)\W/i, async (ctx) => {
-//
-//     const period = ctx.match[1];
-//     const periodMap = {
-//         'сегодня': 'today',
-//         'день': '1d',
-//         'неделю': '1w',
-//         'месяц': '1m'
-//     };
-//
-//     let msg = `Период ${period} не задан в программе`;
-//     if (period in periodMap) {
-//          msg = await Mongo.sum(periodMap[period]);
-//     }
-//
-//     ctx.reply(msg);
-// });
+bot.hears(/^за (.+?)\W/i, async (ctx) => {
+
+    const periodMod = ctx.match[1];
+    const periodMap = {
+        'неделю': '-1 week',
+        'месяц': '-1 month'
+    };
+
+    let msg = `Период ${periodMod} не задан в программе`;
+    if (periodMod in periodMap) {
+        const periodStamps = Mongo.getPeriodInSeconds(periodMod, 'now', true);
+        const mongo = new Mongo();
+        await mongo.connect();
+        msg = await mongo.sum(periodStamps[0], periodStamps[1]);
+    }
+
+    ctx.reply(msg);
+});

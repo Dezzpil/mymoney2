@@ -23,7 +23,7 @@ class Saver {
     setInput(string) {
         try {
             this.data = this.parser.parse(string);
-            this.data['made_at'] = Date.now();
+            this.data['made_at'] = parseInt(Date.now() / 1000);
         } catch (e) {
             throw e;
         }
