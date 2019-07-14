@@ -17,11 +17,15 @@ class Mongo extends Storage {
 
     static async getPeriodInSeconds(from, to, pair=false) {
         let result = await execAwait(`date --date='${from}' +%s`);
-        console.log(`date --date='${from}' +%s`, result.stdout);
+        console.log(`date --date='${from}' +%s`);
         const fromTimestamp = parseInt(result.stdout.replace('\n', ''));
+        console.log(result.stdout, fromTimestamp);
+
         result = await execAwait(`date --date='${to}' +%s`);
-        console.log(`date --date='${to}' +%s`, result.stdout);
+        console.log(`date --date='${to}' +%s`);
         const toTimestamp = parseInt(result.stdout.replace('\n', ''));
+        console.log(result.stdout, toTimestamp);
+
         const delta = fromTimestamp - toTimestamp;
         if (pair) {
             return [fromTimestamp, toTimestamp];
