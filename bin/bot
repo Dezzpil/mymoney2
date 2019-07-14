@@ -58,7 +58,7 @@ bot.hears(/^за (.+)$/i, async (ctx) => {
 
     let msg = `Период ${periodMod} не задан в программе`;
     if (periodMod in periodMap) {
-        const periodStamps = Mongo.getPeriodInSeconds(periodMod, 'now', true);
+        const periodStamps = Mongo.getPeriodInSeconds(periodMap[periodMod], 'now', true);
         const mongo = new Mongo();
         await mongo.connect();
         msg = await mongo.sum(periodStamps[0], periodStamps[1]);
