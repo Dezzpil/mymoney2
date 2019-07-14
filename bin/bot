@@ -50,15 +50,15 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
 
 bot.hears(/^за (.+)$/i, async (ctx) => {
 
-    const periodMod = ctx.match[1];
-    const periodMap = {
+    const mod = ctx.match[1].trim().toLowerCase();
+    const map = {
         'неделю': '-1 week',
         'месяц': '-1 month'
     };
 
-    let msg = `Период ${periodMod} не задан в программе`;
-    if (periodMod in periodMap) {
-        const periodStamps = Mongo.getPeriodInSeconds(periodMap[periodMod], 'now', true);
+    let msg = `Период ${mod} не задан в программе`;
+    if (mod in map) {
+        const periodStamps = Mongo.getPeriodInSeconds(map[mod], 'now', true);
         const mongo = new Mongo();
         await mongo.connect();
         msg = await mongo.sum(periodStamps[0], periodStamps[1]);
