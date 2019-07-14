@@ -17,10 +17,13 @@ const bot = new Telegraf(token, {
 // https://telegraf.js.org/#/?id=webhooks
 bot.startWebhook(`/bot${token}`, null, process.env.PORT);
 
-const parser = new Parser();
-const saver = new Saver(parser);
-
+/**
+ *
+ */
 bot.hears(/^(\d+.+)/i, async (ctx) => {
+
+    const parser = new Parser();
+    const saver = new Saver(parser);
 
     const message = ctx.match[1];
     const user = ctx.from.username
@@ -48,6 +51,9 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
     // ctx.reply('OK');
 });
 
+/**
+ * 
+ */
 bot.hears(/^за (.+)$/i, async (ctx) => {
 
     const mod = ctx.match[1].trim().toLowerCase();
