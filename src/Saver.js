@@ -85,7 +85,7 @@ class Saver {
     }
 
     getResults() {
-        return this.results;
+        return this.results.reverse();
     }
 }
 

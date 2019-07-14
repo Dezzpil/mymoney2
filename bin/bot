@@ -37,7 +37,7 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
 
     try {
         await saver.save([new Mongo(), new GoogleSheet()]);
-        ctx.reply(`Сохранено: ${saver.getResults()}`);
+        ctx.reply(`Сохранено: ${saver.getResults().join(', ')}`);
     } catch (err) {
         ctx.reply(`Не удалось сохранить: ${util.inspect(saver.getErrors())}`);
     }
@@ -48,7 +48,7 @@ bot.hears(/^(\d+.+)/i, async (ctx) => {
     // ctx.reply('OK');
 });
 
-bot.hears(/^за (.+?)\W/i, async (ctx) => {
+bot.hears(/^за (.+)$/i, async (ctx) => {
 
     const periodMod = ctx.match[1];
     const periodMap = {
